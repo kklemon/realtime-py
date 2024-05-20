@@ -95,16 +95,16 @@ class Socket:
                     logging.exception("Connection with the server closed.")
                     break
 
-    def connect(self) -> None:
+    def connect(self, **kwargs) -> None:
         """
         Wrapper for async def _connect() to expose a non-async interface
         """
         loop = asyncio.get_event_loop()  # TODO: replace with get_running
-        loop.run_until_complete(self._connect())
+        loop.run_until_complete(self._connect(**kwargs))
         self.connected = True
 
-    async def _connect(self) -> None:
-        ws_connection = await websockets.connect(self.url)
+    async def _connect(self, **kwargs) -> None:
+        ws_connection = await websockets.connect(self.url, **kwargs)
 
         if ws_connection.open:
             logging.info("Connection was successful")
